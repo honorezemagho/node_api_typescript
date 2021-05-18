@@ -65,6 +65,14 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/honorezemagho/node_typescript.git"
+    },
+    "bugs": {
+      "url": "https://github.com/honorezemagho/node_typescript/issues"
+    },
+    "homepage": "https://github.com/honorezemagho/node_typescript#readme"
   }
 }
