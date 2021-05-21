@@ -51,15 +51,12 @@ export class TasksService {
     return task;
   }
 
-  updateTask(id, updateTaskDto: UpdateTaskDto): Task {
-    const { status } = updateTaskDto;
-    const searchTask = this.tasks.find((task) => task.id == id);
+  updateTask(id: string, status: TaskStatus): Task {
+    const task = this.getTaskById(id);
 
-    const checkStatus = Object.values(TaskStatus).includes(status);
+    task.status = status;
 
-    !checkStatus ? '' : (searchTask.status = status);
-
-    return searchTask;
+    return task;
   }
 
   deleteTask(id) {

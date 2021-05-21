@@ -10,11 +10,11 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { Task } from './task.model';
+import { Task, TaskStatus } from './task.model';
 import { CreateTaskDto } from './dtos/create-task.dto';
-import { UpdateTaskDto } from './dtos/update-task.dto';
 import { GetTasksFilterDto } from './dtos/get-tasks-filter.dto';
 import { ValidationPipe } from '@nestjs/common';
+import { TasksStatusValidationPipe } from './pipes/task-status-validation';
 
 @Controller('tasks')
 export class TasksController {
@@ -41,9 +41,9 @@ export class TasksController {
   @Patch('/:id/status')
   updateTask(
     @Param('id') id: string,
-    @Body() updateTaskDto: UpdateTaskDto,
+    @Body('status', TasksStatusValidationPipe) status: TaskStatus,
   ): Task {
-    return this.tasksService.updateTask(id, updateTaskDto);
+    return this.tasksService.updateTask(id, status);
   }
 
   @Delete('/:id')
