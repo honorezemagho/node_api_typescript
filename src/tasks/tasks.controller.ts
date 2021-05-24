@@ -8,15 +8,14 @@ import {
   Patch,
   Delete,
   UsePipes,
+  ValidationPipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { TaskModel } from './task.model';
 import { TaskStatus } from './task-status.enum';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { GetTasksFilterDto } from './dtos/get-tasks-filter.dto';
-import { ValidationPipe } from '@nestjs/common';
 import { TasksStatusValidationPipe } from './pipes/task-status-validation';
-import { ParseIntPipe } from '@nestjs/common';
 import { Task } from './task.entity';
 
 @Controller('tasks')
