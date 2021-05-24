@@ -18,7 +18,7 @@ export class TaskRepository extends Repository<Task> {
       query.andWhere(
         'task.title like :search OR task.description  like :search',
         {
-          search: '%' + search + '%',
+          search: `%${search}%`,
         },
       );
     }
