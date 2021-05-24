@@ -1,4 +1,3 @@
-
 import { User } from './user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { RegisterCredentialsDto } from './dto/register-credentials.dto';
@@ -8,12 +7,13 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { Task } from 'src/tasks/task.entity';
+import { LoginCredentialsDto } from './dto/login-credentials.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   async signUp(registerCredentialsDto: RegisterCredentialsDto) {
     const { username, email, password } = registerCredentialsDto;
-  
+
     // Check if username or email already exist
     const result: User | null = await this.findOne({
       where: [{ email, username }, { username }, { email }],
@@ -40,5 +40,18 @@ export class UserRepository extends Repository<User> {
 
   private async hashPassword(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
+  }
+
+  async validateUserPassword(
+    loginCredentialsDto: LoginCredentialsDto,
+  ): Promise<string> {
+    const { username, password } = loginCredentialsDto;
+    const user = await this.findOne({ username });
+
+    if (user && (await user.validatePassword(password))) {
+      return user.username;
+    } else {
+      return null;
+    }
   }
 }
