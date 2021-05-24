@@ -10,7 +10,8 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { TaskModel, TaskStatus } from './task.model';
+import { TaskModel } from './task.model';
+import { TaskStatus } from './task-status.enum';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { GetTasksFilterDto } from './dtos/get-tasks-filter.dto';
 import { ValidationPipe } from '@nestjs/common';
