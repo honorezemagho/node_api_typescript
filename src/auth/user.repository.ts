@@ -6,7 +6,6 @@ import {
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Task } from 'src/tasks/task.entity';
 import { LoginCredentialsDto } from './dto/login-credentials.dto';
 
 @EntityRepository(User)

@@ -28,7 +28,7 @@ export class AuthController {
   }
 
   @Post('/test')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard('jwt'))
   test(@Req() req) {
     console.log(req);
   }
