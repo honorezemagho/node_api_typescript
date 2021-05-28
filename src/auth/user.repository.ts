@@ -32,6 +32,7 @@ export class UserRepository extends Repository<User> {
 
     try {
       await user.save();
+      return { message: 'User Created successfully' };
     } catch (error) {
       throw new InternalServerErrorException();
     }
