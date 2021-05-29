@@ -3,12 +3,19 @@ import { CreateTaskDto } from './dtos/create-task.dto';
 import { Task } from './task.entity';
 import { TaskStatus } from './task-status.enum';
 import { GetTasksFilterDto } from './dtos/get-tasks-filter.dto';
+import { User } from '../auth/user.entity';
+import { Getuser } from 'src/auth/get-user.decorator';
 
 @EntityRepository(Task)
 export class TaskRepository extends Repository<Task> {
-  async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
+  async getTasks(
+    filterDto: GetTasksFilterDto,
+    @Getuser() user: User,
+  ): Promise<Task[]> {
     const { status, search } = filterDto;
     const query = this.createQueryBuilder('task');
+
+    query.where({ user });
 
     if (status) {
       query.andWhere('task.status = :status', { status });
@@ -16,7 +23,7 @@ export class TaskRepository extends Repository<Task> {
 
     if (search) {
       query.andWhere(
-        'task.title like :search OR task.description  like :search',
+        '(LOWER(task.title) like LOWER(:search) OR  LOWER(task.description)  like LOWER(:search))',
         {
           search: `%${search}%`,
         },
@@ -26,21 +33,22 @@ export class TaskRepository extends Repository<Task> {
     return query.getMany();
   }
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+  async createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
     const { title, description } = createTaskDto;
 
-    const task = new Task();
+    const task = this.create({
+      title,
+      description,
+      status: TaskStatus.OPEN,
+      user,
+    });
 
-    task.title = title;
-    task.description = description;
-    task.status = TaskStatus.OPEN;
-
-    await task.save();
+    await this.save(task);
 
     return task;
   }
 
-  async destroyTask(id: number) {
-    return this.delete(id);
+  async destroyTask(id: number, user: User) {
+    return this.delete({ id, user });
   }
 }
